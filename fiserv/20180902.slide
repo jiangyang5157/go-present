@@ -1,0 +1,31 @@
+Android Brandable View
+with custom styleable attributes
+
+* Result
+
+
+Let's rename `http.Get` to `http.DoGetPleaseAndThanks`.
+
+First: create the new API
+
+  public Resources (AssetManager assets,
+                  DisplayMetrics metrics,
+                  Configuration config)
+  This constructor was deprecated in API level 25.
+  Resources should not be constructed by apps.
+
+
+    drawable_default="@color/..."
+    drawable_default="@drawable/..."
+
+Second: change each usage of `http.Get` to `http.DoGetPleaseAndThanks`.
+
+drawable_default="@color/..."
+drawable_default="@drawable/..."
+
+Third: remove the old API
+  drawable_default="@color/..."
+  drawable_default="@drawable/..."
+
+* asdasd
+asdda
