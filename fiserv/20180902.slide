@@ -1,31 +1,122 @@
 Android Brandable View
 with custom styleable attributes
 
-* Result
+* Approach
+
+Each brandable view "read" its customised attributes' value *one-by-one*, then dynamically apply all together.
+
+- All data must be combined to make sense
+
+* Text
+
+- Stateless
+
+  android:text
+  android:hint
+
+* Text - Attributes
+
+  <attr name="text" format="string" />
+  <attr name="hint" format="string" />
+
+: p
+  <declare-styleable name="FIRadioButton">
+    <attr name="text" />
+  </declare-styleable>
+
+  <declare-styleable name="FIEditView">
+    <attr name="text" />
+    <attr name="hint" />
+  </declare-styleable>
 
 
-Let's rename `http.Get` to `http.DoGetPleaseAndThanks`.
+* Text - Implementation
 
-First: create the new API
+  BrandString {
+    var mData: String
+      set()
 
-  public Resources (AssetManager assets,
-                  DisplayMetrics metrics,
-                  Configuration config)
-  This constructor was deprecated in API level 25.
-  Resources should not be constructed by apps.
+    fun create(): String = mDate
+  }
+
+  FIRadioButton {
+    val mText = BrandString()
+    ...
+  }
+
+  FIEditView {
+    val mText = BrandString()
+    val mHint = BrandString()
+    ...
+  }
+
+* Text Color
+
+- Stateful
+
+  android:textColor
+  android:textColorHint
+  android:textColorLink
+  android:textColorHighlight
+
+: p
+  android:color="hex_color"
+  android:state_pressed=["true" | "false"]
+  android:state_focused=["true" | "false"]
+  android:state_selected=["true" | "false"]
+  android:state_checkable=["true" | "false"]
+  android:state_checked=["true" | "false"]
+  android:state_enabled=["true" | "false"]
+  android:state_window_focused=["true" | "false"]
+
+* Text Color - Attributes
+
+Most likely to be used
+
+  <attr name="textColor" format="color" />
+  <attr name="textColor_disabled" format="color" />
+  <attr name="textColorHint" format="color" />
+  <attr name="textColorLink" format="color" />
+  <attr name="textColorHighlight" format="color" />
+
+Unlikely to be used
+
+: p
+  <attr name="textColor_pressed" format="color" />
+  <attr name="textColor_focused" format="color" />
+  <attr name="textColor_unfocused" format="color" />
+  <attr name="textColor_focused_pressed" format="color" />
+  ...
+  <attr name="textColorHint_disabled" format="color" />
+  ...
+  <attr name="textColorLink_disabled" format="color" />
+  ...
+  <attr name=textColorHighlight_disabled" format="color" />
+  ...
+
+* State - Implementation
+
+  State<T> {
+    val mPriority: Int
+    val mStates: Int[]
+    val mData: T
+  }
+
+  StateList<>{
+
+  }
 
 
-    drawable_default="@color/..."
-    drawable_default="@drawable/..."
+* Text Color - Implementation
 
-Second: change each usage of `http.Get` to `http.DoGetPleaseAndThanks`.
 
-drawable_default="@color/..."
-drawable_default="@drawable/..."
+  BrandColor {
+    val mStateList: StateList<State<Int>>
 
-Third: remove the old API
-  drawable_default="@color/..."
-  drawable_default="@drawable/..."
+    fun addState(State)
 
-* asdasd
-asdda
+    fun create(): ColorStateList {
+      mStateList.iterate
+    }
+
+  }
