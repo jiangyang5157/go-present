@@ -41,13 +41,11 @@ Each brandable view "read" its customised attributes' value *one-by-one*, then d
 
   FIRadioButton {
     val mText = BrandString()
-    ...
   }
 
   FIEditView {
     val mText = BrandString()
     val mHint = BrandString()
-    ...
   }
 
 * Text Color
@@ -57,7 +55,6 @@ Each brandable view "read" its customised attributes' value *one-by-one*, then d
   android:textColor
   android:textColorHint
   android:textColorLink
-  android:textColorHighlight
 
 : p
   android:color="hex_color"
@@ -77,46 +74,132 @@ Most likely to be used
   <attr name="textColor_disabled" format="color" />
   <attr name="textColorHint" format="color" />
   <attr name="textColorLink" format="color" />
-  <attr name="textColorHighlight" format="color" />
 
 Unlikely to be used
 
-: p
-  <attr name="textColor_pressed" format="color" />
   <attr name="textColor_focused" format="color" />
   <attr name="textColor_unfocused" format="color" />
-  <attr name="textColor_focused_pressed" format="color" />
+  <attr name="textColor_focused_checked" format="color" />
+  <attr name="textColor_unfocused_checked" format="color" />
   ...
   <attr name="textColorHint_disabled" format="color" />
   ...
   <attr name="textColorLink_disabled" format="color" />
   ...
-  <attr name=textColorHighlight_disabled" format="color" />
-  ...
 
 * State - Implementation
 
+<selector> default value should always be last
+
   State<T> {
     val mPriority: Int
-    val mStates: Int[]
+    val mState: Int[]
     val mData: T
   }
 
-  StateList<>{
-
+  StateList<T>{
+    val mStates: PriorityQueue<State<T>>
   }
-
 
 * Text Color - Implementation
 
-
   BrandColor {
-    val mStateList: StateList<State<Int>>
-
-    fun addState(State)
+    val mColorStateList: StateList<Int>
 
     fun create(): ColorStateList {
-      mStateList.iterate
-    }
+      forEach state in mColorStateList:
+          stateArray[index] = state.mState
+          colors[index] = state.mData
 
+      return ColorStateList(stateArray, colors)
+    }
+  }
+
+  FIEditView {
+    val mTextColor = BrandColor()
+
+    when attr:
+        R.attr.FIEditView_textColor_disabled ->
+          mTextColor.addState(1, int[]{-R.attr.state_enable}, repo.getColor(resId))
+        R.attr.FIEditView_textColor ->
+          mTextColor.addState(0, int[]{}, repo.getColor(resId))
+  }
+
+* Background
+
+- Stateful
+
+  android:background
+  android:backgroundTint
+
+: p
+  android:drawable="@[package:]drawable/drawable_resource"
+  android:state_pressed=["true" | "false"]
+  android:state_focused=["true" | "false"]
+  android:state_hovered=["true" | "false"]
+  android:state_selected=["true" | "false"]
+  android:state_checkable=["true" | "false"]
+  android:state_checked=["true" | "false"]
+  android:state_enabled=["true" | "false"]
+  android:state_activated=["true" | "false"]
+  android:state_window_focused=["true" | "false"] />
+
+* Background - Attributes
+
+Most likely to be used
+
+  <attr name="background" format="reference | color" />
+  <attr name="background_disabled" format="reference | color" />
+  <attr name="background_pressed" format="reference | color" />
+  <attr name="background_focused" format="reference | color" />
+  <attr name="backgroundTint" format="color" />
+
+Unlikely to be used
+
+  <attr name="background_activated" format="color" />
+  <attr name="background_deactivated" format="color" />
+  <attr name="background_focused_checked" format="color" />
+  <attr name="background_unfocused_checked" format="color" />
+  ...
+
+* Background - Shape
+  <shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape=["rectangle" | "oval" | "line" | "ring"] >
+    <corners
+      android:radius="integer"
+      ... />
+    <gradient
+      ... />
+    <padding
+      ... />
+    <size
+      ... />
+    <solid
+      android:color="color" />
+    <stroke
+      android:width="integer"
+      android:color="color"
+      ... />
+  </shape>
+
+
+* Background - Implementation
+
+  BrandDrawable {
+    val mDrawableStateList: StateList<Drawable>
+    // val mShapeStateList: StateList<Shape>
+    // or val mCornersRadius: Int
+
+    fun create(): Drawable {
+      forEach state in mStateList:
+        ...
+
+      return
+        ColorDrawable(...)
+        or RippleDrawable(...)
+        or GradientDrawable(...)
+        or StateListDrawable(...)
+        or ...
+    }
   }
