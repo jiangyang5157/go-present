@@ -1,15 +1,36 @@
 Title of document
 Subtitle of document
 15:04 2 Jan 2006
-Tags: foo, bar, baz
 
-Author Name
-Job title, Company
-joe@example.com
-http://url/
-@twitter_name
-Some Text
+http://godoc.org
 
 * Title of slide or section (must have asterisk)
 
 Some Text
+
+- bullets
+- more bullets
+
+Some More text
+
+* Preformatted
+
+ Preformatted text
+ is indented (however you like)
+
+* code
+
+.code java_code.java
+
+* image
+
+.image png_godoc.png
+
+* link
+
+.link http://godoc.org godoc
+
+* iframe
+
+.iframe http://godoc.org 500 1000
+
