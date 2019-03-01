@@ -2,8 +2,16 @@ Android Brandable View
 with custom styleable attributes
 11:07 1 Mar 2019
 
-* X
+* Approach
 
-asd
+Each brandable view "read" its customised attributes' value *one-by-one*, then dynamically apply all together.
 
-: asdas
+* Advantage 
+
+Simple native implementation by solid Android API.
+
+* Drawback
+
+limitation...
+not flexable... 
+restricts...
