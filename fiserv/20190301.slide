@@ -4,14 +4,133 @@ with custom styleable attributes
 
 * Approach
 
-Each brandable view "read" its customised attributes' value *one-by-one*, then dynamically apply all together.
+Mobiliti brandable views read and apply their customised attributes' value from XML layout decoration.
 
-* Advantage 
+- How to read
+    Let Android native mechanism do the work.
+- How to apply
+    We control which properties of which View need to be brandable，
+ 
+* Text
 
-Simple native implementation by solid Android API.
+- Stateless
+- Native attributes
+    android:text
+    android:hint
+
+* Brandable Text
+
+- Customized attributes
+
+    <attr name="text" format="string" /> // -> android:text
+    <attr name="hint" format="string" /> // -> android:hint
+
+    <declare-styleable name="FIRadioButton">
+        <attr name="text" /> // FIRadioButton has a brandable text
+    </declare-styleable>
+
+    <declare-styleable name="FIEditView">
+        <attr name="text" /> // FIEditView has a brandable text
+        <attr name="hint" /> // FIEditView has a brandable hint
+    </declare-styleable>
+
+* Text Color
+
+- Stateful
+
+    android:color="hex_color"
+    android:state_pressed=["true" | "false"]
+    android:state_focused=["true" | "false"]
+    android:state_selected=["true" | "false"]
+    android:state_checkable=["true" | "false"]
+    android:state_checked=["true" | "false"]
+    android:state_enabled=["true" | "false"]
+    android:state_window_focused=["true" | "false"]
+
+- Native attributes
+
+    android:textColor
+    android:textColorHint
+    android:textColorLink
+
+* Brandable Text Color 
+
+- Customized attributes
+
+    <attr name="textColor" format="color" />
+    <attr name="textColor_disabled" format="color" />
+    <attr name="textColor_focused" format="color" />
+    ...
+
+    <attr name="textColorHint" format="color" />
+    <attr name="textColorHint_disabled" format="color" />
+    ...
+
+    <attr name="textColorLink" format="color" />
+    <attr name="textColorLink_disabled" format="color" />
+    ...
+
+    <declare-styleable name="FIEditView">
+        <attr name="textColor" />
+        <attr name="textColor_disabled" />
+    </declare-styleable>
+
+* Brandable Text Color
+
+- Pseudo code
+
+    State<T>:
+        val mPriority: Int
+        val mState: Int[]
+        val mData: T
+
+    FIEditView: 
+        val mTextColor: PriorityQueue<State<Int>>
+
+        forEach attr:
+            when attr:
+                R.attr.FIEditView_textColor ->
+                    mTextColor.addState(0, int[]{}, repo.getColor(resId))
+                R.attr.FIEditView_textColor_disabled ->
+                    mTextColor.addState(1, int[]{-R.attr.state_enable}, repo.getColor(resId))
+    
+        build ColorStateList from mTextColor
+
+* Background
+
+- Stateful
+
+    android:drawable="@[package:]drawable/drawable_resource"
+    android:state_pressed=["true" | "false"]
+    android:state_focused=["true" | "false"]
+    android:state_hovered=["true" | "false"]
+    android:state_selected=["true" | "false"]
+    android:state_checkable=["true" | "false"]
+    android:state_checked=["true" | "false"]
+    android:state_enabled=["true" | "false"]
+    android:state_activated=["true" | "false"]
+    android:state_window_focused=["true" | "false"] />
+
+- Native attributes
+
+    android:background
+    android:backgroundTint
+
+* Brandable Background
+
+- Customized attributes
+
+    <attr name="background" format="reference | color" />
+    <attr name="background_disabled" format="reference | color" />
+    <attr name="background_focused" format="reference | color" />
+    <attr name="background_pressed" format="reference | color" />
+    ...
+
+    <attr name="backgroundTint" format="color" />
+    ...
 
 * Drawback
 
-limitation...
-not flexable... 
-restricts...
+Inflexible...
+Limitation...
+Restricts...
