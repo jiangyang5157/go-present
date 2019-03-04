@@ -4,39 +4,131 @@ with custom styleable attributes
 
 * Approach
 
-Mobiliti brandable views read and apply their customised attributes' value from XML layout decoration.
+Mobiliti brandable views apply both native and customised attributes from XML layout decoration.
 
 - How to read
     Let Android native mechanism do the work.
+
 - How to apply
-    We control which properties of which View need to be brandable，
- 
+    We control how FI**View is branded from attributes' value.
+    
 * Text
 
-- Stateless
 - Native attributes
-    android:text
-    android:hint
 
-* Brandable Text
+    android:text
+
+- Pseudo code
+
+    FIAppCompatButton:
+
+        forEach <attr, resId, type> {
+            if attr is android.R.attr.text:
+                setText(repo.string(resId))
+        }
+
+* Text Color
+
+- Native attributes
+
+    android:textColor
 
 - Customized attributes
 
-    <attr name="text" format="string" /> // -> android:text
-    <attr name="hint" format="string" /> // -> android:hint
+    <attr name="textColor_default" format="color" />
+    <attr name="textColor_disabled" format="color" />
 
-    <declare-styleable name="FIRadioButton">
-        <attr name="text" /> // FIRadioButton has a brandable text
-    </declare-styleable>
-
-    <declare-styleable name="FIEditView">
-        <attr name="text" /> // FIEditView has a brandable text
-        <attr name="hint" /> // FIEditView has a brandable hint
+    <declare-styleable name="FIAppCompatButton">
+        <attr name="textColor_default" />
+        <attr name="textColor_disabled" />
     </declare-styleable>
 
 * Text Color
 
-- Stateful
+- Pseudo code
+
+    FIAppCompatButton:
+
+        val mTextColor: PriorityQueue<State> // <selector> is order-sensitive
+
+        forEach <attr, resId, type> {
+            if attr is android.R.attr.textColor:
+                if type is ColorInt:
+                    setTextColor(repo.color(resId))
+            if attr is R.attr.FIAppCompatButton_textColor_default:
+                mTextColor.addState(0, int[]{}, repo.color(resId))
+            if attr is R.attr.FIAppCompatButton_textColor_disabled:
+                mTextColor.addState(100, int[]{-R.attr.state_enable}, repo.color(resId))
+        }
+
+        if mTextColor is not empty:
+            setTextColor(mTextColor.buildColorStateList())
+
+* Background
+
+- Native attributes
+
+    android:background
+    android:backgroundTint
+    android:backgroundMode
+
+- Customized attributes
+
+    <attr name="background_tint_default" format="reference | color" />
+    <attr name="background_tint_disabled" format="reference | color" />
+
+    <declare-styleable name="FIAppCompatButton">
+        <attr name="background_tint_default" />
+        <attr name="background_tint_disabled" />
+    </declare-styleable>
+
+* Background
+
+- Shape
+
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape=["rectangle" | "oval" | "line" | "ring"] >
+        <corners 
+            android:radius="integer" ... />
+        <gradient ... />
+        <padding ... />
+        <size ... />
+        <solid 
+            android:color="color" />
+        <stroke 
+            android:width="integer" 
+            android:color="color" ... />
+    </shape>
+
+* Background
+
+- Pseudo code
+
+    FIAppCompatButton:
+
+        val mBackgroundTint: PriorityQueue<State>
+
+        forEach <attr, resId, type> {
+            if attr is android.R.attr.background:
+                if type is ColorInt:
+                    setBackgroundColor(repo.color(resId));
+                else:
+                    setBackground(repo.drawable(context, resId))
+            if attr is android.R.attr.backgroundTint:
+                if type is ColorInt:
+                    setBackgroundTintList(ColorStateList(repo.color(resId))
+            if attr is R.attr.FIAppCompatButton_background_tint_default:
+                mBackgroundTint.addState(0, int[]{}, repo.color(resId))
+            if attr is R.attr.FIAppCompatButton_background_tint_disabled:
+                mBackgroundTint.addState(100, int[]{-R.attr.state_enable}, repo.color(resId))
+        }
+
+        if mBackgroundTint is not empty:
+            setBackgroundTintList(mBackgroundTint.buildColorStateList());
+
+* Stateful
+
+- Color
 
     android:color="hex_color"
     android:state_pressed=["true" | "false"]
@@ -47,58 +139,7 @@ Mobiliti brandable views read and apply their customised attributes' value from 
     android:state_enabled=["true" | "false"]
     android:state_window_focused=["true" | "false"]
 
-- Native attributes
-
-    android:textColor
-    android:textColorHint
-    android:textColorLink
-
-* Brandable Text Color 
-
-- Customized attributes
-
-    <attr name="textColor" format="color" />
-    <attr name="textColor_disabled" format="color" />
-    <attr name="textColor_focused" format="color" />
-    ...
-
-    <attr name="textColorHint" format="color" />
-    <attr name="textColorHint_disabled" format="color" />
-    ...
-
-    <attr name="textColorLink" format="color" />
-    <attr name="textColorLink_disabled" format="color" />
-    ...
-
-    <declare-styleable name="FIEditView">
-        <attr name="textColor" />
-        <attr name="textColor_disabled" />
-    </declare-styleable>
-
-* Brandable Text Color
-
-- Pseudo code
-
-    State<T>:
-        val mPriority: Int
-        val mState: Int[]
-        val mData: T
-
-    FIEditView: 
-        val mTextColor: PriorityQueue<State<Int>>
-
-        forEach attr:
-            when attr:
-                R.attr.FIEditView_textColor ->
-                    mTextColor.addState(0, int[]{}, repo.getColor(resId))
-                R.attr.FIEditView_textColor_disabled ->
-                    mTextColor.addState(1, int[]{-R.attr.state_enable}, repo.getColor(resId))
-    
-        build ColorStateList from mTextColor
-
-* Background
-
-- Stateful
+- Drawable
 
     android:drawable="@[package:]drawable/drawable_resource"
     android:state_pressed=["true" | "false"]
@@ -111,26 +152,3 @@ Mobiliti brandable views read and apply their customised attributes' value from 
     android:state_activated=["true" | "false"]
     android:state_window_focused=["true" | "false"] />
 
-- Native attributes
-
-    android:background
-    android:backgroundTint
-
-* Brandable Background
-
-- Customized attributes
-
-    <attr name="background" format="reference | color" />
-    <attr name="background_disabled" format="reference | color" />
-    <attr name="background_focused" format="reference | color" />
-    <attr name="background_pressed" format="reference | color" />
-    ...
-
-    <attr name="backgroundTint" format="color" />
-    ...
-
-* Drawback
-
-Inflexible...
-Limitation...
-Restricts...
