@@ -3,8 +3,15 @@ Subtitle of document
 15:04 2 Jan 2006
 
 http://godoc.org
+https://github.com/golang/talks/tree/master/content/2017
+https://talks.golang.org/2017
 
 * Title of slide or section (must have asterisk)
+
+asd
+.caption [[https://golang.org/issue/19813][issue #19813]]
+
+* Agenda
 
 Some Text
 
@@ -20,7 +27,8 @@ Some More text
 
 * code
 
-.code java_code.java
+.code -edit main.java /START_1 OMIT/,/STOP OMIT/ HLthisline
+.code main.java /START_2 OMIT/,/STOP OMIT/
 
 * image
 
@@ -30,7 +38,9 @@ Some More text
 
 .link http://godoc.org godoc
 
+A recording of this talk is available [[https://www.youtube.com/watch?v=dyvpF0jF3AY&list=PLtLJO5JKE5YAeVbgwCkgUWyOBsMvZu4UB&index=1][here]].
+
+
 * iframe
 
 .iframe http://godoc.org 500 1000
-
