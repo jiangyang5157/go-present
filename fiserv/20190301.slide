@@ -2,6 +2,19 @@ Android Brandable View
 with custom styleable attributes
 11:07 1 Mar 2019
 
+* Agenda
+
+: Last year, we have realized the constructor on android.content.res.Resources(AssetManager, DisplayMetrics, Configuration) was deprecated in API 25. It left us a risk since our dynamic branding implementation is based on subclassing Resources. We will need to change how we do dynamic branding on Android before the deprecation is brought into effect. 
+: We came up with 2 solutions which are either using data binding library or implementing customized attributes for each brandable view. In consideration of a minimum change on each layout/view and other concerns (Payment Plugin), we are planning to use the second approach: Mobiliti styleable views apply both native and customized attributes from XML layout decoration.
+
+- Approach & Why
+- Stateless Text example
+- Statefull TextColor example
+- Statefull Background example
+- Showcase
+- Tricky
+- Ugly
+
 * Approach
 
 Mobiliti brandable views apply both native and customised attributes from XML layout decoration.
@@ -11,144 +24,79 @@ Mobiliti brandable views apply both native and customised attributes from XML la
 
 - How to apply
     We control how FI**View is branded from attributes' value.
-    
+
+- Why
+    It's not hacky.
+    It has minimum code changes required (view / layout / plugin).
+
 * Text
 
 - Native attributes
 
-    android:text
+.code code/text /START_native_attr OMIT/,/STOP_native_attr OMIT/
 
-- Pseudo code
+* Text
 
-    FIAppCompatButton:
-
-        forEach <attr, resId, type> {
-            if attr is android.R.attr.text:
-                setText(repo.string(resId))
-        }
+.code code/text /START_branding OMIT/,/STOP_branding OMIT/ HL_attr
 
 * Text Color
 
 - Native attributes
 
-    android:textColor
+.code code/text-color /START_native_attr OMIT/,/STOP_native_attr OMIT/
 
 - Customized attributes
 
-    <attr name="textColor_default" format="color" />
-    <attr name="textColor_disabled" format="color" />
+.code code/text-color /START_customized_attr OMIT/,/STOP_customized_attr OMIT/
 
-    <declare-styleable name="FIAppCompatButton">
-        <attr name="textColor_default" />
-        <attr name="textColor_disabled" />
-    </declare-styleable>
+* ColorStateList
+
+.iframe http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/reference/android/content/res/ColorStateList.html 550 1024
+
+.caption [[http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/license.html][Android Open Source Project]]
 
 * Text Color
 
-- Pseudo code
-
-    FIAppCompatButton:
-
-        val mTextColor: PriorityQueue<State> // <selector> is order-sensitive
-
-        forEach <attr, resId, type> {
-            if attr is android.R.attr.textColor:
-                if type is ColorInt:
-                    setTextColor(repo.color(resId))
-            if attr is R.attr.FIAppCompatButton_textColor_default:
-                mTextColor.addState(0, int[]{}, repo.color(resId))
-            if attr is R.attr.FIAppCompatButton_textColor_disabled:
-                mTextColor.addState(100, int[]{-R.attr.state_enable}, repo.color(resId))
-        }
-
-        if mTextColor is not empty:
-            setTextColor(mTextColor.buildColorStateList())
+.code -edit code/text-color /START_branding OMIT/,/STOP_branding OMIT/ HL_attr
 
 * Background
 
 - Native attributes
 
-    android:background
-    android:backgroundTint
-    android:backgroundMode
+.code code/background /START_native_attr OMIT/,/STOP_native_attr OMIT/
 
 - Customized attributes
 
-    <attr name="background_tint_default" format="reference | color" />
-    <attr name="background_tint_disabled" format="reference | color" />
-
-    <declare-styleable name="FIAppCompatButton">
-        <attr name="background_tint_default" />
-        <attr name="background_tint_disabled" />
-    </declare-styleable>
+.code code/background /START_customized_attr OMIT/,/STOP_customized_attr OMIT/
 
 * Background
 
-- Shape
+.code -edit code/background /START_branding OMIT/,/STOP_branding OMIT/ HL_attr
 
-    <shape xmlns:android="http://schemas.android.com/apk/res/android"
-        android:shape=["rectangle" | "oval" | "line" | "ring"] >
-        <corners 
-            android:radius="integer" ... />
-        <gradient ... />
-        <padding ... />
-        <size ... />
-        <solid 
-            android:color="color" />
-        <stroke 
-            android:width="integer" 
-            android:color="color" ... />
-    </shape>
+* Shape Drawable
 
-* Background
+.iframe http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/guide/topics/resources/drawable-resource.html#Shape 550 1024
 
-- Pseudo code
+.caption [[http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/license.html][Android Open Source Project]]
 
-    FIAppCompatButton:
+* Tint Mode
 
-        val mBackgroundTint: PriorityQueue<State>
+.iframe http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/reference/android/graphics/PorterDuff.Mode.html 550 1024
 
-        forEach <attr, resId, type> {
-            if attr is android.R.attr.background:
-                if type is ColorInt:
-                    setBackgroundColor(repo.color(resId));
-                else:
-                    setBackground(repo.drawable(context, resId))
-            if attr is android.R.attr.backgroundTint:
-                if type is ColorInt:
-                    setBackgroundTintList(ColorStateList(repo.color(resId))
-            if attr is R.attr.FIAppCompatButton_background_tint_default:
-                mBackgroundTint.addState(0, int[]{}, repo.color(resId))
-            if attr is R.attr.FIAppCompatButton_background_tint_disabled:
-                mBackgroundTint.addState(100, int[]{-R.attr.state_enable}, repo.color(resId))
-        }
+.caption [[http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/license.html][Android Open Source Project]]
 
-        if mBackgroundTint is not empty:
-            setBackgroundTintList(mBackgroundTint.buildColorStateList());
+* Tint Mode
 
-* Stateful
+show some imgs
 
-- Color
+* Tricky
 
-    android:color="hex_color"
-    android:state_pressed=["true" | "false"]
-    android:state_focused=["true" | "false"]
-    android:state_selected=["true" | "false"]
-    android:state_checkable=["true" | "false"]
-    android:state_checked=["true" | "false"]
-    android:state_enabled=["true" | "false"]
-    android:state_window_focused=["true" | "false"]
+code show: add 2 ints and sort 
 
-- Drawable
+* Ugly
 
-    android:drawable="@[package:]drawable/drawable_resource"
-    android:state_pressed=["true" | "false"]
-    android:state_focused=["true" | "false"]
-    android:state_hovered=["true" | "false"]
-    android:state_selected=["true" | "false"]
-    android:state_checkable=["true" | "false"]
-    android:state_checked=["true" | "false"]
-    android:state_enabled=["true" | "false"]
-    android:state_activated=["true" | "false"]
-    android:state_window_focused=["true" | "false"] />
+- States are order-senstive (eg: focused > pressed)
 
+- Impassible to support all states
+
+- Tint by one color per state: cannot "brand" two different color at the same time

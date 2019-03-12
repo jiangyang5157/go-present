@@ -7,6 +7,9 @@ Each brandable view "read" its customised attributes' value *one-by-one*, then d
 
 - All data must be combined to make sense
 
+: Last year, we have realized the constructor on android.content.res.Resources(AssetManager, DisplayMetrics, Configuration) was deprecated in API 25. It left us a risk since our dynamic branding implementation is based on subclassing Resources. We will need to change how we do dynamic branding on Android before the deprecation is brought into effect. 
+: We came up with 2 solutions which are either using data binding library or implementing customized attributes for each brandable view. In consideration of a minimum change on each layout/view and other concerns (Payment Plugin), we are planning to use the second approach: Mobiliti styleable views apply both native and customized attributes from XML layout decoration.
+
 * Text
 
 - Stateless

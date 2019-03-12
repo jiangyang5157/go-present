@@ -1,0 +1,38 @@
+
+// START_native_attr OMIT
+android:background
+android:backgroundTint
+android:backgroundMode
+// STOP_native_attr OMIT
+
+// START_customized_attr OMIT
+<attr name="background_tint_default" format="reference | color" />
+<attr name="background_tint_disabled" format="reference | color" />
+...
+// STOP_customized_attr OMIT
+
+// START_branding OMIT
+val mBackgroundTint: PriorityQueue<State>
+
+forEach <attr, resId, type> {
+
+    if attr is android.R.attr.background:
+        if type is ColorInt:
+            background = repo.color(resId).toColorDrawable()
+        if type is BitmapDrawable:
+            background = repo.drawable(resId).toBitmapDrawable()
+
+    if attr is android.R.attr.backgroundTint: // HL_attr
+        if type is ColorInt:
+            mBackgroundTint += State(0, int[]{}, repo.color(resId))
+
+    if attr is R.attr.FI<*>View_background_tint_default: // HL_attr
+        mBackgroundTint += State(0, int[]{}, repo.color(resId))
+
+    if attr is R.attr.FI<*>View_background_tint_disabled: // HL_attr
+        mBackgroundTint += State(100, int[]{-R.attr.state_enable}, repo.color(resId))
+}
+
+backgroundTint = mBackgroundTint.toColorStateList()
+// STOP_branding OMIT
+

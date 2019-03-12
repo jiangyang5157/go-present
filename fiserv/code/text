@@ -1,0 +1,17 @@
+
+// START_native_attr OMIT
+android:text
+android:hint
+// STOP_native_attr OMIT
+
+// START_branding OMIT
+forEach <attr, resId> {
+
+    if attr is android.R.attr.text: // HL_attr
+        text = repo.string(resId)
+    
+    if attr is android.R.attr.hint: // HL_attr
+        hint = repo.string(resId)
+}
+// STOP_branding OMIT
+
