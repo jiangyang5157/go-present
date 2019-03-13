@@ -53,7 +53,7 @@ Mobiliti brandable views apply both native and customised attributes from XML la
 
 .iframe http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/reference/android/content/res/ColorStateList.html 550 1024
 
-.caption [[http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/license.html][Android Open Source Project]]
+.caption [[http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/license.html][Content License]]
 
 * Text Color
 
@@ -77,17 +77,25 @@ Mobiliti brandable views apply both native and customised attributes from XML la
 
 .iframe http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/guide/topics/resources/drawable-resource.html#Shape 550 1024
 
-.caption [[http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/license.html][Android Open Source Project]]
+.caption [[http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/license.html][Content License]]
 
 * Tint Mode
 
-.iframe http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/reference/android/graphics/PorterDuff.Mode.html 550 1024
+[[https://developer.android.com/reference/android/graphics/PorterDuff.Mode#enum-values_1][Examples]]
 
-.caption [[http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/license.html][Android Open Source Project]]
+.image image/tintmode-btn.png _ 1024
 
-* Tint Mode
+* Showcase
 
-show some imgs
+- Toolbar, Webview
+
+.image image/tint-toolbar-webview.png _ 1024
+
+* Showcase
+
+- Icon, Image, Button
+
+.image image/tint-icon-img-btn.png 455 _
 
 * Tricky
 
