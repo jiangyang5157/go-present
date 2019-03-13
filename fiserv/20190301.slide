@@ -105,8 +105,6 @@ Mobiliti brandable views apply both native and customised attributes from XML la
 
 * Ugly
 
-- States are order-senstive (eg: focused > pressed)
+- States are order-senstive and hardcoded in base classes (FI<*>View)
 
-- Impassible to support all states
-
-- Tint by one color per state: cannot "brand" two different color at the same time
+- Impassible to support all states‘ combination
