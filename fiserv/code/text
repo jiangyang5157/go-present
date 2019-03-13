@@ -7,11 +7,11 @@ android:hint
 // START_branding OMIT
 forEach <attr, resId> {
 
-    if attr is android.R.attr.text: // HL_attr
-        text = repo.string(resId)
+    if attr is android.R.attr.text: 
+        text = repo.string(resId) // HL
     
-    if attr is android.R.attr.hint: // HL_attr
-        hint = repo.string(resId)
+    if attr is android.R.attr.hint:
+        hint = repo.string(resId) // HL
 }
 // STOP_branding OMIT
 

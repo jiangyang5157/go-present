@@ -23,7 +23,7 @@ Mobiliti brandable views apply both native and customised attributes from XML la
     Let Android native mechanism do the work.
 
 - How to apply
-    We control how FI**View is branded from attributes' value.
+    We control how FI<*>View is branded from attributes' value.
 
 - Why
     It's not hacky.
@@ -37,7 +37,7 @@ Mobiliti brandable views apply both native and customised attributes from XML la
 
 * Text
 
-.code code/text /START_branding OMIT/,/STOP_branding OMIT/ HL_attr
+.code code/text /START_branding OMIT/,/STOP_branding OMIT/
 
 * Text Color
 
@@ -57,7 +57,7 @@ Mobiliti brandable views apply both native and customised attributes from XML la
 
 * Text Color
 
-.code -edit code/text-color /START_branding OMIT/,/STOP_branding OMIT/ HL_attr
+.code -edit code/text-color /START_branding OMIT/,/STOP_branding OMIT/
 
 * Background
 
@@ -71,13 +71,11 @@ Mobiliti brandable views apply both native and customised attributes from XML la
 
 * Background
 
-.code -edit code/background /START_branding OMIT/,/STOP_branding OMIT/ HL_attr
+.code -edit code/background /START_branding OMIT/,/STOP_branding OMIT/
 
 * Shape Drawable
 
-.iframe http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/guide/topics/resources/drawable-resource.html#Shape 550 1024
-
-.caption [[http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/license.html][Content License]]
+.code code/shape-drawable.xml
 
 * Tint Mode
 
@@ -99,7 +97,11 @@ Mobiliti brandable views apply both native and customised attributes from XML la
 
 * Tricky
 
-code show: add 2 ints and sort 
+.code code/branding-handler /START_styleable OMIT/,/STOP_styleable OMIT/
+
+.code code/branding-handler /START_obtain_attrs OMIT/,/STOP_obtain_attrs OMIT/
+
+.code -edit code/branding-handler /START_branding OMIT/,/STOP_branding OMIT/
 
 * Ugly
 

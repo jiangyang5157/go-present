@@ -6,8 +6,8 @@ android:backgroundMode
 // STOP_native_attr OMIT
 
 // START_customized_attr OMIT
-<attr name="background_tint_default" format="reference | color" />
-<attr name="background_tint_disabled" format="reference | color" />
+<attr name="background_tint_default" format="color" />
+<attr name="background_tint_disabled" format="color" />
 ...
 // STOP_customized_attr OMIT
 
@@ -22,15 +22,15 @@ forEach <attr, resId, type> {
         if type is BitmapDrawable:
             background = repo.drawable(resId).toBitmapDrawable()
 
-    if attr is android.R.attr.backgroundTint: // HL_attr
+    if attr is android.R.attr.backgroundTint:
         if type is ColorInt:
-            mBackgroundTint += State(0, int[]{}, repo.color(resId))
+            mBackgroundTint += State(0, int[]{}, repo.color(resId)) // HL
 
-    if attr is R.attr.FI<*>View_background_tint_default: // HL_attr
-        mBackgroundTint += State(0, int[]{}, repo.color(resId))
+    if attr is R.attr.FI<*>View_background_tint_default:
+        mBackgroundTint += State(0, int[]{}, repo.color(resId)) // HL
 
-    if attr is R.attr.FI<*>View_background_tint_disabled: // HL_attr
-        mBackgroundTint += State(100, int[]{-R.attr.state_enable}, repo.color(resId))
+    if attr is R.attr.FI<*>View_background_tint_disabled:
+        mBackgroundTint += State(100, int[]{-R.attr.state_enable}, repo.color(resId)) // HL
 }
 
 backgroundTint = mBackgroundTint.toColorStateList()

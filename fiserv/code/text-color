@@ -16,17 +16,17 @@ val mTextColor: PriorityQueue<State>
 
 forEach <attr, resId, type> {
 
-    if attr is android.R.attr.textColor: // HL_attr
+    if attr is android.R.attr.textColor:
         if type is ColorInt:
-            mTextColor += State(0, int[]{}, repo.color(resId))
+            mTextColor += State(0, int[]{}, repo.color(resId)) // HL
 
-    if attr is R.attr.FI<*>View_textColor_default: // HL_attr
-        mTextColor += State(0, int[]{}, repo.color(resId))
+    if attr is R.attr.FI<*>View_textColor_default:
+        mTextColor += State(0, int[]{}, repo.color(resId)) // HL
 
-    if attr is R.attr.FI<*>View_textColor_disabled: // HL_attr
-        mTextColor += State(100, int[]{-R.attr.state_enable}, repo.color(resId))
+    if attr is R.attr.FI<*>View_textColor_disabled:
+        mTextColor += State(100, int[]{-R.attr.state_enable}, repo.color(resId)) // HL
 }
 
-textColor = mTextColor.build()
+textColor = mTextColor.toColorStateList()
 // STOP_branding OMIT
 

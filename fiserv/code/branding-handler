@@ -1,208 +1,28 @@
-public class BrandingHandler {
+    
+// START_styleable OMIT
+<declare-styleable name="FI<*>View">
+    <attr name="textColor_default" />
+    <attr name="textColor_disabled" />
+    <attr name="background_tint_default" />
+    <attr name="background_tint_disabled" />
+</declare-styleable>
+// STOP_styleable OMIT
 
-    public interface Attr {
+// START_obtain_attrs OMIT
+val nativeAttrs = int[]{ android.R.attr.text }
+val attrs = concat(nativeAttr, R.styleable.FI<*>View).ascendingSort() // HL
+val typedArray = context.theme.obtainStyledAttributes(attrSets, attrs, defStyleAttr, defStyleRes)
+// STOP_obtain_attrs OMIT
 
-        int[] getAttrIds();
-
-        void onAttrIdFound(int attrId, int resId, int type);
-    }
-
-    public static int[] concatAttrIds(int[] a, int[] b) {
-        if (a == null) {
-            return b;
-        }
-        if (b == null) {
-            return a;
-        }
-
-        int[] c = new int[a.length + b.length];
-        int i = 0;
-        for (int x : a) {
-            c[i] = x;
-            i++;
-        }
-        for (int x : b) {
-            c[i] = x;
-            i++;
-        }
-        return c;
-    }
-
-    public static boolean isColorInt(int type) {
-        return type >= TypedValue.TYPE_FIRST_COLOR_INT && type <= TypedValue.TYPE_LAST_COLOR_INT;
-    }
-
-    public void brandAttr(Attr attr, Context context, AttributeSet attrSets, int defStyleAttr) {
-        if (attr == null || context == null || attrSets == null) {
-            return;
-        }
-
-        int[] attrs = attr.getAttrIds();
-        if (attrs == null) {
-            return;
-        }
-        Arrays.sort(attrs);
-
-        TypedArray array = context.getTheme().obtainStyledAttributes(attrSets, attrs, defStyleAttr, 0);
-        int n = array.getIndexCount();
-        for (int i = 0; i < n; i++) {
-            int attrIndex = array.getIndex(i);
-            int resId = array.getResourceId(attrIndex, 0);
-            if (resId == 0) {
-                continue;
-            }
-            attr.onAttrIdFound(attrs[attrIndex], resId, array.getType(attrIndex));
-        }
-        array.recycle();
-    }
+// START_branding OMIT
+forEach <attr, resId, type>: {
+    
+    if attr == android.R.attr.text: // HL
+        // attr is android.R.attr.text
+        ...
+    if attr == R.styleable.FI<*>View[R.styleable.FI<*>View_textColor_default]: // HL
+        // attr is R.attr.FI<*>View_textColor_default
+        ...
+    ...
 }
-
-// ################################################################
-
-        new BrandingHandler().brandAttr(this, context, attrs, defStyleAttr);
-
-        ColorStateList textColor = BrandingRepository.getInstance(getContext()).getColorStateList(getContext(), mTextColorList);
-        if (textColor != null) {
-            setTextColor(textColor);
-        }
-
-        ColorStateList backgroundTint = BrandingRepository.getInstance(getContext()).getColorStateList(getContext(), mBackgroundTintList);
-        if (backgroundTint != null) {
-            setBackgroundTintList(backgroundTint);
-        }
-
-    public ColorStateList getColorStateList(Context context, BrandingStateList brandingStateList) {
-        if (brandingStateList == null || brandingStateList.size() == 0) {
-            return null;
-        }
-
-        int[][] stateSets = new int[brandingStateList.size()][];
-        int[] colors = new int[brandingStateList.size()];
-        Iterator<BrandingState> iterator = brandingStateList.iterator();
-        int index = 0;
-        while (iterator.hasNext()) {
-            BrandingState state = iterator.next();
-            stateSets[index] = state.mStateSet;
-            colors[index] = getColorInt(context, state.mResId);
-            index++;
-        }
-        return new ColorStateList(stateSets, colors);
-    }
-
-// ################################################################
-
-@Override
-    public int[] getAttrIds() {
-        return BrandingHandler.concatAttrIds(
-                new int[]{
-                        android.R.attr.text,
-                },
-                R.styleable.FIAppCompatButton
-        );
-    }
-
-    @Override
-    public void onAttrIdFound(int attrId, int resId, int type) {
-        if (attrId == android.R.attr.text) {
-            setText(BrandingRepository.getInstance(getContext()).getString(getContext(), resId));
-
-        } else if (attrId == R.styleable.FIAppCompatButton[R.styleable.FIAppCompatButton_textColor_disabled]) {
-            mTextColorList.add(new BrandingState(100, new int[]{-android.R.attr.state_enabled}, resId));
-        } else if (attrId == R.styleable.FIAppCompatButton[R.styleable.FIAppCompatButton_textColor_default]) {
-            mTextColorList.add(new BrandingState(0, new int[]{}, resId));
-
-        } else if (attrId == R.styleable.FIAppCompatButton[R.styleable.FIAppCompatButton_background_disabled]) {
-            mBackgroundTintList.add(new BrandingState(100, new int[]{-android.R.attr.state_enabled}, resId));
-        } else if (attrId == R.styleable.FIAppCompatButton[R.styleable.FIAppCompatButton_background_default]) {
-            mBackgroundTintList.add(new BrandingState(0, new int[]{}, resId));
-        }
-    }
-
-// ################################################################
-
-    <style name="ButtonTheme" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:minHeight">@dimen/button_height</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:stateListAnimator">@null</item>
-        <item name="android:backgroundTintMode">add</item>
-    </style>
-
-    <style name="ButtonTheme.Primary">
-        <item name="textColor_disabled">@color/button_primary_text_disabled</item>
-        <item name="textColor_default">@color/button_primary_text</item>
-        <item name="android:background">@drawable/primary_button_ripple_selector</item>
-        <item name="background_disabled">@color/button_primary_background_disabled</item>
-        <item name="background_default">@color/button_primary_background</item>
-    </style>
-
-    <style name="ButtonTheme.Primary.Unbranded">
-        <item name="android:textColor">@color/button_primary_text_selector</item>
-        <item name="android:background">@drawable/primary_button_ripple_selector_unbranded</item>
-    </style>
-
-    <style name="ButtonTheme.Secondary">
-        <item name="textColor_disabled">@color/button_secondary_text_disabled</item>
-        <item name="textColor_default">@color/button_secondary_text</item>
-        <item name="android:background">@drawable/secondary_button_ripple_selector</item>
-        <item name="background_disabled">@color/button_secondary_border_disabled</item>
-        <item name="background_default">@color/button_secondary_border</item>
-    </style>
-
-    <style name="ButtonTheme.Secondary.Unbranded">
-        <item name="android:textColor">@color/button_secondary_text_selector</item>
-        <item name="android:background">@drawable/secondary_button_ripple_selector_unbranded</item>
-    </style>
-
-    <style name="ButtonTheme.Holo">
-        <item name="android:textColor">@color/button_holo_text_selector</item>
-        <item name="textColor_disabled">@color/button_holo_text_disabled</item>
-        <item name="textColor_default">@color/button_holo_text</item>
-        <item name="android:background">@drawable/holo_button_ripple_selector</item>
-        <item name="background_disabled">@color/button_holo_background_disabled</item>
-        <item name="background_default">@color/button_holo_background</item>
-    </style>
-
-    <style name="ButtonTheme.Holo.Inverse">
-        <item name="android:textColor">@color/button_holo_inverse_text_selector</item>
-        <item name="textColor_disabled">@color/button_holo_inverse_text_disabled</item>
-        <item name="textColor_default">@color/button_holo_inverse_text</item>
-        <item name="android:background">@drawable/holo_button_inverse_ripple_selector</item>
-        <item name="background_disabled">@color/button_holo_inverse_background_disabled</item>
-        <item name="background_default">@color/button_holo_inverse_background</item>
-    </style>
-
-    <style name="CalendarItem">
-        <item name="android:backgroundTintMode">add</item>
-    </style>
-
-    <style name="CalendarItem.Default">
-        <item name="android:textColor">@color/calendar_item_color_selector</item>
-        <item name="textColor_disabled">@color/calendar_inactive_date</item>
-        <item name="textColor_pressed">@color/calendar_text_selected</item>
-        <item name="textColor_selected">@color/calendar_text_selected</item>
-        <item name="textColor_activated">@color/calendar_text_selected</item>
-        <item name="textColor_default">@color/calendar_text</item>
-        <item name="android:background">@drawable/calendar_item_background_selector</item>
-        <item name="background_disabled">@color/non_brandable_background_color</item>
-        <item name="background_pressed">@color/grey</item>
-        <item name="background_selected">@color/brand</item>
-        <item name="background_activated">@color/brand</item>
-        <item name="background_default">@color/non_brandable_background_color</item>
-    </style>
-
-    <style name="TabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">@dimen/text_size_xx_small</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:ellipsize">end</item>
-    </style>
-
-    <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
-        <item name="tabBackground">@color/non_brandable_background_color</item>
-        <item name="tabIndicatorColor">@color/button_primary_background</item>
-        <item name="tabIndicatorHeight">@dimen/tab_indicator_height</item>
-        <item name="tabTextAppearance">@style/TabLayoutTextAppearance</item>
-        <item name="tabTextColor">@color/text_secondary</item>
-        <item name="tabSelectedTextColor">@color/button_primary_background</item>
-    </style>
+// STOP_branding OMIT
