@@ -48,9 +48,9 @@ Mobiliti brandable views apply both native and customised attributes from XML la
 
 * ColorStateList
 
-.iframe http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/reference/android/content/res/ColorStateList.html 550 1024
+.image image/ColorStateList.png _ 980
 
-.caption [[http://www.dre.vanderbilt.edu/~schmidt/android/android-4.0/out/target/common/docs/doc-comment-check/license.html][Content License]]
+    The list of state specs will be processed in order.
 
 * Text Color
 

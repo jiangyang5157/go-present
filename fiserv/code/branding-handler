@@ -17,12 +17,13 @@ val typedArray = context.theme.obtainStyledAttributes(attrSets, attrs, defStyleA
 // START_branding OMIT
 forEach <attr, resId, type>: {
     
-    if attr == android.R.attr.text: // HL
-        // attr is android.R.attr.text
+    // android.R.attr.text: It's the actual native attr ID // HL
+    if attr == android.R.attr.text:
         ...
-    if attr == R.styleable.FI<*>View[R.styleable.FI<*>View_textColor_default]: // HL
-        // attr is R.attr.FI<*>View_textColor_default
+    
+    // R.styleable.FI<*>View: It's an array of custom attr IDs // HL
+    // R.styleable.FI<*>View_textColor_default: It's the index of the textColor_default attr ID // HL
+    if attr == R.styleable.FI<*>View[R.styleable.FI<*>View_textColor_default]: 
         ...
-    ...
 }
 // STOP_branding OMIT
