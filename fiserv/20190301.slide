@@ -8,7 +8,8 @@ with custom styleable attributes
 : We came up with 2 solutions which are either using data binding library or implementing customized attributes for each brandable view. In consideration of a minimum change on each layout/view and other concerns (Payment Plugin), we are planning to use the second approach: Mobiliti styleable views apply both native and customized attributes from XML layout decoration.
 
 - Approach
-- Examples of state-less and state-full attribute
+- Examples of state-less attribute: Text
+- Examples of state-full attribute: TextColor, Background
 - Drawback
 
 * Approach
